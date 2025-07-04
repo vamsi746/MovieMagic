@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ movie.title }} - Details{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <div class="row g-4">
+    <div class="col-md-5">
+      <img src="{{ movie.banner }}" class="img-fluid rounded shadow-lg animate__animated animate__fadeIn" alt="{{ movie.title }}">
+    </div>
+    <div class="col-md-7">
+      <h2 class="mb-2">{{ movie.title }}</h2>
+      <p class="text-muted">{{ movie.genre }} • {{ movie.release }} • {{ movie.rating }}</p>
+      <p class="mb-4">{{ movie.description }}</p>
+      <h5 class="mb-3">Select Theatre, Date & Show Timing</h5>
+
+      {% for theatre in theatres %}
+      <div class="glass-card p-3 mb-4">
+        <h6 class="mb-2">{{ theatre.name }}</h6>
+        <div class="mb-3">
+          <label for="showDate-{{ theatre.id }}" class="form-label">Select Date:</label>
+          <input type="date" id="showDate-{{ theatre.id }}" class="form-control glass-input" required>
+        </div>
+        <p class="mb-2">Show Timings:</p>
+        <div class="d-flex flex-wrap gap-2">
+          {% for time in theatre.timings %}
+          <button 
+            type="button" 
+            class="glass-pill-btn"
+            onclick="bookSeats('{{ movie.id }}', '{{ theatre.id }}', '{{ time }}', 'showDate-{{ theatre.id }}')">
+            {{ time }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+function bookSeats(movieId, theatreId, timing, dateInputId) {
+  const date = document.getElementById(dateInputId).value;
+  if (!date) {
+    alert('Please select a date!');
+    return;
+  }
+  const url = `/select_seats/${movieId}/${theatreId}?timing=${encodeURIComponent(timing)}&date=${encodeURIComponent(date)}`;
+  window.location.href = url;
+}
+</script>
+
+<style>
+/* Glass card container */
+.glass-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 1rem;
+  backdrop-filter: blur(12px);
+}
+
+/* Stylish pill buttons */
+.glass-pill-btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  color: #eee;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.glass-pill-btn:hover {
+  background: rgba(229,9,20,0.4);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(229,9,20,0.5);
+}
+
+/* Glass input style */
+.glass-input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #eee;
+}
+.glass-input:focus {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  box-shadow: none;
+}
+</style>
+{% endblock %}

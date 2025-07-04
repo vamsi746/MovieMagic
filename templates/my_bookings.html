@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center mb-4">📘 My Booking History</h2>
+  {% if bookings %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+      {% for booking in bookings %}
+        <div class="col">
+          <div class="card p-3 animate__animated animate__fadeInUp" style="background: rgba(0,0,0,0.8); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem;">
+            <h5>{{ booking.movie }}</h5>
+            <p><strong>Theatre:</strong> {{ booking.theater }}</p>
+            <p><strong>Date:</strong> {{ booking.date }} | <strong>Time:</strong> {{ booking.timing }}</p>
+            <p><strong>Seats:</strong> {{ booking.seat }}</p>
+            <p><strong>Number of Persons:</strong> {{ booking.persons }}</p>
+            <p><strong>Total Paid:</strong> ₹{{ booking.amount }}</p>
+            <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+                <!-- Cancel Booking Button -->
+            <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking.booking_id) }}" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger mt-2">❌ Cancel Booking</button>
+            </form>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text">You have no bookings yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

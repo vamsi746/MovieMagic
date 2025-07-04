@@ -1,0 +1,27 @@
+
+{% extends "base.html" %}
+{% block title %}Home - Movie Magic{% endblock %}
+{% block content %}
+<h1 class="text-center my-4">🎬 Now Showing</h1>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+  {% for movie in movies %}
+  <div class="col">
+    <div class="card h-100 shadow animate__animated animate__zoomIn animate__delay-1s">
+      <div class="position-relative">
+        <img src="{{ movie.banner }}" class="card-img-top" alt="{{ movie.title }}">
+        {% if movie.trending %}
+        <span class="badge bg-danger position-absolute top-0 end-0 m-2">Trending</span>
+        {% endif %}
+      </div>
+      <div class="card-body d-flex flex-column" style="background: rgba(0,0,0,0.7); color: #eee;">
+        <h5 class="card-title">{{ movie.title }}</h5>
+        <p class="card-text">{{ movie.genre }} • {{ movie.release }}</p>
+        <p class="card-text">{{ movie.description }}</p>
+        <p><strong>{{ movie.rating }}</strong></p>
+        <a href="{{ url_for('movie_details', movie_id=movie.id) }}" class="btn btn-primary mt-auto animate__animated animate__pulse animate__infinite animate__slower">Book Now</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

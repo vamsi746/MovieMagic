@@ -1,0 +1,409 @@
+/* Global body */
+
+body {
+  background: linear-gradient(135deg, #121212, #1a1a1a);
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glass cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  backdrop-filter: blur(12px);
+  padding: 1rem;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #e50914;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #ff3b3f;
+}
+
+.btn-outline-light {
+  border-color: rgba(255,255,255,0.3);
+}
+.btn-outline-light:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* NavBar */
+.navbar {
+  background-color: rgba(0,0,0,0.8);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.navbar-brand, .nav-link, .navbar-text {
+  color: #eee !important;
+}
+.navbar-brand:hover, .nav-link:hover {
+  color: #fff !important;
+}
+
+/* Cards and content fade in */
+.animate__animated {
+  animation-duration: 0.7s;
+}
+
+.card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+}
+
+/* Movie banners */
+.card-img-top {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+/* Seat selection styling tweaks */
+.seat-map {
+  gap: 1rem;
+}
+
+.seat-tile {
+  font-weight: 500;
+}
+
+/* Links */
+a {
+  color: #e50914;
+}
+a:hover {
+  color: #ff3b3f;
+  text-decoration: none;
+}
+
+/* Form inputs */
+.form-control, .form-select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #eee;
+}
+.form-control:focus, .form-select:focus {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  box-shadow: none;
+}
+.carousel-inner img {
+  object-fit: cover;
+  height: 400px;
+}
+.hero-banner {
+  background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+  min-height: 400px;
+  color: #fff;
+  padding: 60px 20px;
+}
+
+.hero-banner h1,
+.hero-banner p {
+  color: #fff;
+}
+
+.feature-box {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 0.5rem;
+}
+
+.feature-box i {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #e50914;
+}
+.carousel-inner .carousel-item {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-inner .bg-dark {
+  background: rgba(0,0,0,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+/* Common seat style */
+.seat-tile {
+  display: inline-block;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Executive default */
+.seat-tile.executive {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+/* Premium default */
+.seat-tile.premium {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+/* VIP default */
+.seat-tile.vip {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+/* Hover */
+.seat-tile:hover {
+  transform: scale(1.05);
+  border-color: #e50914;
+}
+
+/* Selected state */
+.btn-check:checked + .seat-tile.executive {
+  background: #570505;
+  color: #fff;
+}
+.btn-check:checked + .seat-tile.premium {
+  background: #111211;
+  color: #fff;
+}
+.btn-check:checked + .seat-tile.vip {
+  background: #094701;
+  color: #fff;
+}
+.row.g-2 {
+  margin-bottom: 0.3rem;
+}
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 1.5rem;
+  }
+
+  .seat-map .row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  .seat-map .col-auto {
+    flex: 0 0 auto;
+    margin: 2px;
+  }
+
+  .seat-tile {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  h2, h3, h4 {
+    font-size: 1.25rem !important;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}
+.profile-tile {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto;
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+.social-icon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.4rem;
+  transition: transform 0.2s ease;
+}
+
+.social-icon img:hover {
+  transform: scale(1.1);
+}
+
+.badge {
+  font-size: 0.85rem;
+  margin: 0.2rem;
+}
+
+.card p, .card h2 {
+  color: #fff;
+}
+.profile-tile {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto;
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+  background-size: cover;
+  background-position: center;
+  background-image: url('../static/profile.jpg');
+}
+.developer-hero {
+  position: relative;
+  background-image: url('/static/profile.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 2rem;
+}
+
+.developer-hero .overlay {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background: rgba(0,0,0,0.75); /* Dark overlay */
+  z-index: 1;
+}
+
+.developer-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  background: rgba(0,0,0,0.6);
+  padding: 2rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+.developer-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.developer-content .tagline {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.developer-content .section {
+  margin-top: 1.5rem;
+}
+
+.developer-content .section h3 {
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.developer-content .badges .badge {
+  margin: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.developer-content .links .btn {
+  margin: 0.3rem;
+}
+
+.developer-content p {
+  font-size: 1rem;
+}
+
+/* Optional: film-grain effect */
+.developer-hero::before {
+  content: "";
+  position: absolute;
+  top:0;left:0;right:0;bottom:0;
+  background: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+  opacity:0.05;
+  z-index:2;
+}
+.developer-card {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  min-height: 650px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+}
+
+.developer-card .overlay {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('/static/profile.jpg') center/cover no-repeat;
+  z-index: 1;
+}
+
+.developer-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+
+.developer-content h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.developer-content .tagline {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.developer-content .section {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.developer-content .section h3 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.developer-content .badges .badge {
+  margin: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.developer-content .links .btn {
+  margin: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .developer-content {
+    padding: 1rem;
+  }
+  .developer-content h1 {
+    font-size: 1.7rem;
+  }
+}

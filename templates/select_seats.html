@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Select Seats - Movie Magic{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <h2>{{ movie.title }}</h2>
+  <p><strong>Theatre:</strong> {{ theatre.name }}</p>
+  <p><strong>Show Time:</strong> {{ timing }}</p>
+  <p><strong>Date:</strong> {{ date }}</p>
+
+  <!-- Screen Indicator -->
+  <div class="text-center my-4">
+    <div class="bg-secondary text-white py-2 px-4 rounded">🎬 Screen This Way</div>
+  </div>
+
+  <form method="POST" id="seatForm">
+    <div class="seat-map d-flex flex-column align-items-center gap-4">
+
+      <!-- Executive Section -->
+      <div class="w-100 text-start"><strong>Rs. 150 Executive</strong></div>
+      {% for row in ['A','B'] %}
+      <div class="row justify-content-center align-items-center g-2">
+        <div class="col-auto text-light">{{ row }}</div>
+        {% for col in range(1,13) %}
+        {% set seat_id = row ~ col %}
+        <div class="col-auto">
+          <input type="checkbox" class="btn-check" name="seat" value="{{ seat_id }}" id="{{ seat_id }}" data-price="150">
+          <label class="seat-tile executive" for="{{ seat_id }}">{{ col }}</label>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <!-- Premium Section -->
+      <div class="w-100 text-start mt-4"><strong>Rs. 200 Premium</strong></div>
+      {% for row in ['C','D','E','F'] %}
+      <div class="row justify-content-center align-items-center g-2">
+        <div class="col-auto text-light">{{ row }}</div>
+        {% for col in range(1,13) %}
+        {% set seat_id = row ~ col %}
+        <div class="col-auto">
+          <input type="checkbox" class="btn-check" name="seat" value="{{ seat_id }}" id="{{ seat_id }}" data-price="200">
+          <label class="seat-tile premium" for="{{ seat_id }}">{{ col }}</label>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <!-- VIP Section -->
+      <div class="w-100 text-start mt-4"><strong>Rs. 280 VIP</strong></div>
+      {% for row in ['G','H','I','J'] %}
+      <div class="row justify-content-center align-items-center g-2">
+        <div class="col-auto text-light">{{ row }}</div>
+        {% for col in range(1,13) %}
+        {% set seat_id = row ~ col %}
+        <div class="col-auto">
+          <input type="checkbox" class="btn-check" name="seat" value="{{ seat_id }}" id="{{ seat_id }}" data-price="280">
+          <label class="seat-tile vip" for="{{ seat_id }}">{{ col }}</label>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- Summary Box -->
+    <div class="glass-card mt-4 p-3" id="summaryBox" style="display:none;">
+      <p><strong>Selected Seats:</strong> <span id="selectedSeats"></span></p>
+      <p><strong>Price per Seat:</strong> ₹<span id="seatPrice"></span></p>
+      <p><strong>Total Seats:</strong> <span id="totalSeats"></span></p>
+      <p><strong>Total Price:</strong> ₹<span id="totalPrice"></span></p>
+    </div>
+
+    <div class="mt-4">
+      <label for="persons" class="form-label">Number of Persons:</label>
+      <select name="persons" id="persons" class="form-select" required>
+        {% for i in range(1,11) %}
+        <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <input type="hidden" name="total_price" id="total_price_input">
+    <input type="hidden" name="date" value="{{ date }}">
+    <input type="hidden" name="timing" value="{{ timing }}">
+
+    <button type="submit" class="btn btn-success mt-4">Confirm Booking</button>
+  </form>
+</div>
+
+<style>
+/* Seat styling (same as before) */
+.seat-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  color: #eee;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.seat-tile:hover {
+  background: rgba(229,9,20,0.3);
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 5px rgba(229,9,20,0.6);
+}
+.btn-check:checked + .seat-tile {
+  background: rgba(229,9,20,0.6);
+  color: #fff;
+  border-color: rgba(229,9,20,0.8);
+  box-shadow: 0 0 8px rgba(229,9,20,0.8);
+  transform: scale(1.1);
+}
+.premium:hover {
+  background: rgba(0,123,255,0.3);
+  box-shadow: 0 0 5px rgba(0,123,255,0.6);
+}
+.btn-check:checked + .premium {
+  background: rgba(0,123,255,0.6);
+  border-color: rgba(0,123,255,0.8);
+  box-shadow: 0 0 8px rgba(0,123,255,0.8);
+}
+.vip:hover {
+  background: rgba(40,167,69,0.3);
+  box-shadow: 0 0 5px rgba(40,167,69,0.6);
+}
+.btn-check:checked + .vip {
+  background: rgba(40,167,69,0.6);
+  border-color: rgba(40,167,69,0.8);
+  box-shadow: 0 0 8px rgba(40,167,69,0.8);
+}
+</style>
+
+<script>
+// Live summary calculation
+const checkboxes = document.querySelectorAll('input[name="seat"]');
+const summaryBox = document.getElementById('summaryBox');
+const selectedSeatsEl = document.getElementById('selectedSeats');
+const seatPriceEl = document.getElementById('seatPrice');
+const totalSeatsEl = document.getElementById('totalSeats');
+const totalPriceEl = document.getElementById('totalPrice');
+
+checkboxes.forEach(cb => {
+  cb.addEventListener('change', () => {
+    const selected = Array.from(checkboxes).filter(c => c.checked);
+    if (selected.length === 0) {
+      summaryBox.style.display = 'none';
+      return;
+    }
+    summaryBox.style.display = 'block';
+    const seats = selected.map(c => c.value);
+    let total = 0;
+let priceText = "Mixed";
+selected.forEach(seat => {
+  total += parseInt(seat.dataset.price);
+});
+if (selected.length > 0) {
+  const uniquePrices = [...new Set(selected.map(s => s.dataset.price))];
+  priceText = uniquePrices.length === 1 ? `₹${uniquePrices[0]}` : "Varies";
+}
+selectedSeatsEl.textContent = selected.map(c => c.value).join(', ');
+seatPriceEl.textContent = priceText;
+totalSeatsEl.textContent = selected.length;
+totalPriceEl.textContent = total;
+document.getElementById('total_price_input').value = total;
+
+  });
+});
+</script>
+{% endblock %}
