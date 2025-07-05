@@ -1,9 +1,67 @@
 {% extends "base.html" %}
 {% block title %}Register - Movie Magic{% endblock %}
 {% block content %}
-<div class="gradient-bg">
-  <div class="glass-card animate__animated animate__fadeInDown">
-    <h2 class="text-center mb-4">🎬 Create Your Account</h2>
+<style>
+  .netflix-register {
+    background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.6)),
+                url('/static/netflix-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .register-box {
+    background-color: rgba(0,0,0,0.75);
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    color: #fff;
+    animation: fadeInUp 0.6s ease;
+  }
+  .register-box h2 {
+    font-weight: bold;
+  }
+  .register-box .form-control {
+    background-color: #333;
+    border: none;
+    color: #fff;
+    transition: background 0.3s;
+  }
+  .register-box .form-control:focus {
+    background-color: #444;
+  }
+  .register-box .btn-register {
+    background-color: #e50914;
+    border: none;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  .register-box .btn-register:hover {
+    background-color: #f6121d;
+  }
+  .register-box .signin-link {
+    color: #aaa;
+  }
+  .register-box .signin-link a {
+    color: #fff;
+    text-decoration: none;
+  }
+  .register-box .signin-link a:hover {
+    text-decoration: underline;
+  }
+  @keyframes fadeInUp {
+    from {transform: translateY(20px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+</style>
+
+<div class="netflix-register">
+  <div class="register-box">
+    <h2 class="text-center mb-4">🎬 Create Account</h2>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for msg in messages %}
@@ -12,18 +70,27 @@
       {% endif %}
     {% endwith %}
     <form method="POST">
-      <div class="form-group mb-3">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+      <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
       </div>
-      <div class="form-group mb-4">
-        <label>Password</label>
-        <input type="password" class="form-control" name="password" placeholder="Choose a password" required>
+      <div class="mb-3">
+        <label for="password" class="form-label">🔒 Enter Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
       </div>
-      <button type="submit" class="btn neon-btn w-100">Register</button>
+      <div class="mb-3">
+        <label for="confirm_password" class="form-label">🔒 Confirm Password</label>
+        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
+      </div>
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="terms" required>
+        <label class="form-check-label" for="terms">
+          I agree to the <a href="{{ url_for('terms') }}" style="color:#fff;">Terms & Conditions</a>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-register mb-3">Sign Up</button>
     </form>
-    <div class="text-center mt-3">
-      <small>Already have an account? <a href="{{ url_for('login') }}">Login</a></small>
+    <div class="text-center signin-link">
+      Already have an account? <a href="{{ url_for('login') }}">Sign in now</a>
     </div>
   </div>
 </div>
