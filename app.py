@@ -145,8 +145,13 @@ theatres = {
 # === Routes ===
 
 @app.route('/')
+@app.route('/')
 def index():
+    if 'email' not in session:
+        # User is not logged in, redirect to login
+        return redirect(url_for('login'))
     return render_template('index.html', movies=movies)
+
 
 @app.route('/movie/<movie_id>')
 def movie_details(movie_id):
@@ -163,9 +168,12 @@ def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        confirm_password = request.form['confirm_password']
 
         if get_user(email):
             flash('User already exists!')
+        elif password != confirm_password:
+            flash('Passwords do not match!')
         else:
             store_user(email, password)
             flash('Registered successfully!')
@@ -210,10 +218,14 @@ def booking():
             'booking_id': booking_id,
             'user': session['email'],
             'movie': movie,
+            'movie_id': movie_id,           # new
             'theater': theater,
-            'seat': seat
+            'theater_id': theater_id,       # new
+            'date': date,                   # new
+            'time': time,                   # new
+            'seats': selected_seats,        # this must be a list!
+            'num_persons': num_persons
         }
-
         store_booking(booking_data)
         send_email_notification(booking_data)
 
@@ -315,6 +327,9 @@ def developer():
         return redirect(url_for('developer'))
 
     return render_template('developer.html')
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
