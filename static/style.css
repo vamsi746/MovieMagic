@@ -407,3 +407,147 @@ a:hover {
     font-size: 1.7rem;
   }
 }
+/* 🎬 Login Card Styling */
+.login-card {
+  background: rgba(0, 0, 0, 0.85);
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 100%;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.login-card h2 {
+  font-weight: 600;
+  color: #ffc107;
+}
+
+.login-card label {
+  color: #ccc;
+}
+
+.login-card .form-control {
+  background-color: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+}
+
+.login-card .form-control:focus {
+  background-color: rgba(255,255,255,0.2);
+  box-shadow: none;
+  color: #fff;
+}
+
+.login-card .btn-primary {
+  background: #ff5722;
+  border: none;
+}
+
+.login-card .btn-primary:hover {
+  background: #e64a19;
+}
+
+.login-card a {
+  color: #03a9f4;
+}
+
+.login-card a:hover {
+  color: #0288d1;
+}
+/* 🎬 Cinematic Background */
+.cinema-bg {
+  background: url('/static/cinema.jpg') center/cover no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🧊 Glass Card */
+.glass-card {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  color: #fff;
+}
+
+/* ✨ Neon Button */
+.neon-btn {
+  background: #ff5722;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.neon-btn:hover {
+  background: #ff784e;
+  box-shadow: 0 0 10px #ff5722, 0 0 20px #ff5722, 0 0 30px #ff5722;
+  color: #000;
+}
+
+/* ✨ Input styling */
+.glass-card .form-control {
+  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.glass-card .form-control:focus {
+  background-color: rgba(255,255,255,0.2);
+  color: #fff;
+}
+/* 🎬 Subtle Gradient Background */
+.gradient-bg {
+  background: linear-gradient(135deg, #121212, #1e1e1e);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🧊 Glass Card */
+.glass-card {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  color: #fff;
+}
+
+/* ✨ Neon Button */
+.neon-btn {
+  background: #ff5722;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.neon-btn:hover {
+  background: #ff784e;
+  box-shadow: 0 0 10px #ff5722, 0 0 20px #ff5722;
+  color: #000;
+}
+
+/* ✨ Input styling */
+.glass-card .form-control {
+  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.glass-card .form-control:focus {
+  background-color: rgba(255,255,255,0.2);
+  color: #fff;
+}
