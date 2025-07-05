@@ -2,16 +2,24 @@
 {% block title %}Login - Movie Magic{% endblock %}
 {% block content %}
 <style>
-  .netflix-login {
-    background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.6)),
-                url('/static/netflix-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-  }
+  .netflix-login,
+.netflix-register {
+  background-image: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.6)),
+                    url('/static/netflix-bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 2rem;
+  overflow-x: hidden;
+}
+
   .login-box {
     background-color: rgba(0,0,0,0.75);
     padding: 40px;
