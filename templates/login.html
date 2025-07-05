@@ -1,9 +1,67 @@
 {% extends "base.html" %}
 {% block title %}Login - Movie Magic{% endblock %}
 {% block content %}
-<div class="gradient-bg">
-  <div class="glass-card animate__animated animate__fadeInDown">
-    <h2 class="text-center mb-4">🎬 Movie Magic Login</h2>
+<style>
+  .netflix-login {
+    background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.6)),
+                url('/static/netflix-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .login-box {
+    background-color: rgba(0,0,0,0.75);
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    color: #fff;
+    animation: zoomIn 0.6s ease;
+  }
+  .login-box h2 {
+    font-weight: bold;
+  }
+  .login-box .form-control {
+    background-color: #333;
+    border: none;
+    color: #fff;
+    transition: background 0.3s;
+  }
+  .login-box .form-control:focus {
+    background-color: #444;
+  }
+  .login-box .btn-login {
+    background-color: #e50914;
+    border: none;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  .login-box .btn-login:hover {
+    background-color: #f6121d;
+  }
+  .login-box .register-link {
+    color: #aaa;
+  }
+  .login-box .register-link a {
+    color: #fff;
+    text-decoration: none;
+  }
+  .login-box .register-link a:hover {
+    text-decoration: underline;
+  }
+  @keyframes zoomIn {
+    from {transform: scale(0.9); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+  }
+</style>
+
+<div class="netflix-login">
+  <div class="login-box">
+    <h2 class="text-center mb-4">🎬 Sign In</h2>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for msg in messages %}
@@ -12,18 +70,18 @@
       {% endif %}
     {% endwith %}
     <form method="POST">
-      <div class="form-group mb-3">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+      <div class="mb-3">
+        <label for="email" class="form-label">📧 Email</label>
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
       </div>
-      <div class="form-group mb-4">
-        <label>Password</label>
-        <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+      <div class="mb-3">
+        <label for="password" class="form-label">🔒 Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
       </div>
-      <button type="submit" class="btn neon-btn w-100">Login</button>
+      <button type="submit" class="btn btn-login mb-3">Sign In</button>
     </form>
-    <div class="text-center mt-3">
-      <small>New here? <a href="{{ url_for('register') }}">Create an account</a></small>
+    <div class="text-center register-link">
+      New to Movie Magic? <a href="{{ url_for('register') }}">Sign up now</a>
     </div>
   </div>
 </div>
