@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Register - Movie Magic{% endblock %}
+{% block title %}Login - Movie Magic{% endblock %}
 {% block content %}
 <style>
   .netflix-login,
@@ -20,56 +20,56 @@
   overflow-x: hidden;
 }
 
-  .register-box {
+  .login-box {
     background-color: rgba(0,0,0,0.75);
     padding: 40px;
     border-radius: 10px;
     max-width: 400px;
     width: 100%;
     color: #fff;
-    animation: fadeInUp 0.6s ease;
+    animation: zoomIn 0.6s ease;
   }
-  .register-box h2 {
+  .login-box h2 {
     font-weight: bold;
   }
-  .register-box .form-control {
+  .login-box .form-control {
     background-color: #333;
     border: none;
     color: #fff;
     transition: background 0.3s;
   }
-  .register-box .form-control:focus {
+  .login-box .form-control:focus {
     background-color: #444;
   }
-  .register-box .btn-register {
+  .login-box .btn-login {
     background-color: #e50914;
     border: none;
     width: 100%;
     font-weight: bold;
     transition: background 0.3s;
   }
-  .register-box .btn-register:hover {
+  .login-box .btn-login:hover {
     background-color: #f6121d;
   }
-  .register-box .signin-link {
+  .login-box .register-link {
     color: #aaa;
   }
-  .register-box .signin-link a {
+  .login-box .register-link a {
     color: #fff;
     text-decoration: none;
   }
-  .register-box .signin-link a:hover {
+  .login-box .register-link a:hover {
     text-decoration: underline;
   }
-  @keyframes fadeInUp {
-    from {transform: translateY(20px); opacity: 0;}
-    to {transform: translateY(0); opacity: 1;}
+  @keyframes zoomIn {
+    from {transform: scale(0.9); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
   }
 </style>
 
-<div class="netflix-register">
-  <div class="register-box">
-    <h2 class="text-center mb-4">🎬 Create Account</h2>
+<div class="netflix-login">
+  <div class="login-box">
+    <h2 class="text-center mb-4">🎬 Sign In</h2>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for msg in messages %}
@@ -79,26 +79,17 @@
     {% endwith %}
     <form method="POST">
       <div class="mb-3">
+        <label for="email" class="form-label">📧 Email</label>
         <input type="email" name="email" class="form-control" placeholder="Email" required>
       </div>
       <div class="mb-3">
-        <label for="password" class="form-label">🔒 Enter Password</label>
+        <label for="password" class="form-label">🔒 Password</label>
         <input type="password" name="password" class="form-control" placeholder="Password" required>
       </div>
-      <div class="mb-3">
-        <label for="confirm_password" class="form-label">🔒 Confirm Password</label>
-        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
-      </div>
-      <div class="form-check mb-3">
-        <input type="checkbox" class="form-check-input" id="terms" required>
-        <label class="form-check-label" for="terms">
-          I agree to the <a href="{{ url_for('terms') }}" style="color:#fff;">Terms & Conditions</a>
-        </label>
-      </div>
-      <button type="submit" class="btn btn-register mb-3">Sign Up</button>
+      <button type="submit" class="btn btn-login mb-3">Sign In</button>
     </form>
-    <div class="text-center signin-link">
-      Already have an account? <a href="{{ url_for('login') }}">Sign in now</a>
+    <div class="text-center register-link">
+      New to Movie Magic? <a href="{{ url_for('register') }}">Sign up now</a>
     </div>
   </div>
 </div>
