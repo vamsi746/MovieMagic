@@ -1,16 +1,18 @@
-# 🔁 Uncomment these when AWS is ready
-# from aws_helper import store_user_aws as store_user
-# from aws_helper import get_user_aws as get_user
-# from aws_helper import store_booking_aws as store_booking
-# from aws_helper import send_email_notification_aws as send_email_notification
-
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import uuid
+from pymongo import MongoClient
+
+# 🔗 MongoDB Atlas Connection
+MONGO_URI = "mongodb+srv://Vamsi:Vamsi123@cluster0.kxrk338.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+client = MongoClient(MONGO_URI)
+db = client["moviemagic"]
+users_collection = db["users"]
+bookings_collection = db["bookings"]
 
 app = Flask(__name__)
-app.secret_key = "secret123"  # For session security
+app.secret_key = "secret123"
 
-# Sample movie catalog
+# === Sample Movies ===
 movies = [
     {
         "id": "1",
@@ -86,72 +88,49 @@ movies = [
     }
 ]
 
-# === Local Simulated Database ===
-users = {}
-bookings = {}
 
-# === Helper Functions (Mock AWS Logic) ===
-
-def store_user(email, password):
-    """Store user in local mock DB"""
-    users[email] = {'password': password}
-
-def get_user(email):
-    """Retrieve user from local mock DB"""
-    return users.get(email)
-
-def store_booking(data):
-    """Store booking in local mock DB"""
-    bookings[data['booking_id']] = data
-
-def get_booking(booking_id):
-    """Retrieve booking from local mock DB"""
-    return bookings.get(booking_id)
-
-def send_email_notification(booking):
-    """Simulated AWS SNS Email Notification"""
-    print(f"[SIMULATED EMAIL] Booking confirmation sent to {booking['user']}")
-    # This will later use AWS SNS in cloud
-
-# === Theatre Data per Movie ===
+# === Theatre Data ===
 theatres = {
     "1": [
         {"id": "t1", "name": "PVR Cinemas - Andheri", "timings": ["10:00 AM", "1:00 PM", "7:00 PM"]},
         {"id": "t2", "name": "Carnival - Borivali", "timings": ["11:30 AM", "3:00 PM", "9:00 PM"]}
     ],
-    "2": [
-        {"id": "t3", "name": "Cinepolis - Malad", "timings": ["9:00 AM", "12:30 PM", "6:30 PM"]},
-        {"id": "t4", "name": "INOX - Ghatkopar", "timings": ["2:00 PM", "5:30 PM", "8:45 PM"]}
-    ],
-    "3": [
-        {"id": "t5", "name": "PVR Icon - Lower Parel", "timings": ["10:15 AM", "2:15 PM", "7:45 PM"]},
-        {"id": "t6", "name": "Miraj Cinemas - Chembur", "timings": ["1:00 PM", "4:00 PM", "10:00 PM"]}
-    ],
-    "4": [
-        {"id": "t7", "name": "Movietime - Kandivali", "timings": ["9:30 AM", "1:30 PM", "6:00 PM"]},
-        {"id": "t8", "name": "MAXUS Cinemas - Bhayandar", "timings": ["11:00 AM", "3:00 PM", "9:00 PM"]}
-    ],
-    "5": [
-        {"id": "t9", "name": "Gold Cinema - Mulund", "timings": ["10:45 AM", "2:45 PM", "8:15 PM"]},
-        {"id": "t10", "name": "PVR Phoenix - Kurla", "timings": ["12:00 PM", "4:00 PM", "10:30 PM"]}
-    ],
-    "6": [
-        {"id": "t11", "name": "Carnival - Dahisar", "timings": ["9:00 AM", "1:00 PM", "7:00 PM"]},
-        {"id": "t12", "name": "Cinepolis - Thane", "timings": ["11:15 AM", "3:15 PM", "9:15 PM"]}
-    ]
+    # (keep your other theatres here)
 }
 
+# === DB Helpers ===
+def store_user(email, password):
+    users_collection.insert_one({"email": email, "password": password})
+
+def get_user(email):
+    return users_collection.find_one({"email": email})
+
+def store_booking(data):
+    bookings_collection.insert_one(data)
+
+def get_user_bookings(email):
+    return list(bookings_collection.find({"user": email}))
+
+def delete_booking(booking_id, email):
+    return bookings_collection.delete_one({"booking_id": booking_id, "user": email})
+
+def get_bookings_for_show(movie_id, theater_id, date, timing):
+    return list(bookings_collection.find({
+        "movie_id": movie_id,
+        "theater_id": theater_id,
+        "date": date,
+        "timing": timing
+    }))
+
+def send_email_notification(booking):
+    print(f"[SIMULATED EMAIL] Booking confirmation sent to {booking['user']}")
 
 # === Routes ===
-
-@app.route('/')
 @app.route('/')
 def index():
     if 'email' not in session:
-        # User is not logged in, redirect to login
         return redirect(url_for('login'))
     return render_template('index.html', movies=movies)
-
 
 @app.route('/movie/<movie_id>')
 def movie_details(movie_id):
@@ -159,7 +138,6 @@ def movie_details(movie_id):
     if not movie:
         flash("Movie not found!")
         return redirect(url_for('index'))
-
     movie_theatres = theatres.get(movie_id, [])
     return render_template('movie_details.html', movie=movie, theatres=movie_theatres)
 
@@ -171,12 +149,12 @@ def register():
         confirm_password = request.form['confirm_password']
 
         if get_user(email):
-            flash('User already exists!')
+            flash("User already exists!")
         elif password != confirm_password:
-            flash('Passwords do not match!')
+            flash("Passwords do not match!")
         else:
             store_user(email, password)
-            flash('Registered successfully!')
+            flash("Registered successfully!")
             return redirect(url_for('login'))
 
     return render_template('register.html')
@@ -190,87 +168,40 @@ def login():
         user = get_user(email)
         if user and user['password'] == password:
             session['email'] = email
-            flash('Login successful!')
-            return redirect(url_for('index'))  # ✅ Changed to index
+            flash("Login successful!")
+            return redirect(url_for('index'))
         else:
-            flash('Invalid credentials!')
+            flash("Invalid credentials!")
 
     return render_template('login.html')
-
-@app.route('/booking', methods=['GET', 'POST'])
-def booking():
-    if 'email' not in session:
-        flash('Please login first!')
-        return redirect(url_for('login'))
-
-    movie_id = request.args.get('movie_id')
-    selected_movie = None
-    if movie_id:
-        selected_movie = next((m for m in movies if m['id'] == movie_id), None)
-
-    if request.method == 'POST':
-        movie = request.form['movie']
-        theater = request.form['theater']
-        seat = request.form['seat']
-        booking_id = str(uuid.uuid4())[:8]
-
-        booking_data = {
-            'booking_id': booking_id,
-            'user': session['email'],
-            'movie': movie,
-            'movie_id': movie_id,           # new
-            'theater': theater,
-            'theater_id': theater_id,       # new
-            'date': date,                   # new
-            'time': time,                   # new
-            'seats': selected_seats,        # this must be a list!
-            'num_persons': num_persons
-        }
-        store_booking(booking_data)
-        send_email_notification(booking_data)
-
-        return render_template('tickets.html', booking_id=booking_id, data=booking_data)
-
-    return render_template('booking.html', selected_movie=selected_movie)
 
 @app.route('/select_seats/<movie_id>/<theatre_id>', methods=['GET', 'POST'])
 def select_seats(movie_id, theatre_id):
     if 'email' not in session:
-        flash('Please login to book seats.')
+        flash("Please login to book seats.")
         return redirect(url_for('login'))
 
     movie = next((m for m in movies if m['id'] == movie_id), None)
     theatre_list = theatres.get(movie_id, [])
     theatre = next((t for t in theatre_list if t['id'] == theatre_id), None)
 
-    # Get date and timing
     timing = request.args.get('timing')
     date = request.args.get('date')
 
-    # 🎯 Collect already booked seats for this show
     booked_seats = []
-    for booking in bookings.values():
-        if (
-            booking.get("movie_id") == movie_id and
-            booking.get("theater_id") == theatre_id and
-            booking.get("date") == date and
-            booking.get("timing") == timing
-        ):
-            # Split seat string into a list
-            booked_seats.extend([s.strip() for s in booking.get("seat", "").split(",") if s.strip()])
+    for booking in get_bookings_for_show(movie_id, theatre_id, date, timing):
+        booked_seats.extend([s.strip() for s in booking.get("seat", "").split(",") if s.strip()])
 
     if request.method == 'POST':
         date = request.form.get('date', date)
         timing = request.form.get('timing', timing)
-
         selected_seats = request.form.getlist('seat')
         persons = request.form.get('persons')
         total_price = request.form.get('total_price', '0')
 
-        # Check if any selected seat was already booked
         for seat in selected_seats:
             if seat in booked_seats:
-                flash(f"Seat {seat} is already sold out. Please choose different seats.")
+                flash(f"Seat {seat} is already sold out.")
                 return redirect(request.url)
 
         if not selected_seats:
@@ -278,83 +209,67 @@ def select_seats(movie_id, theatre_id):
             return redirect(request.url)
 
         booking_id = str(uuid.uuid4())[:8]
-
         booking_data = {
-            'booking_id': booking_id,
-            'user': session['email'],
-            'movie': movie['title'],
-            'movie_id': movie_id,
-            'theater': theatre['name'],
-            'theater_id': theatre_id,
-            'timing': timing,
-            'seat': ", ".join(selected_seats),
-            'persons': persons,
-            'date': date,
-            'amount': total_price
+            "booking_id": booking_id,
+            "user": session['email'],
+            "movie": movie['title'],
+            "movie_id": movie_id,
+            "theater": theatre['name'],
+            "theater_id": theatre_id,
+            "timing": timing,
+            "seat": ", ".join(selected_seats),
+            "persons": persons,
+            "date": date,
+            "amount": total_price
         }
-
         store_booking(booking_data)
         send_email_notification(booking_data)
+        return render_template("tickets.html", booking_id=booking_id, data=booking_data)
 
-        return render_template('tickets.html', booking_id=booking_id, data=booking_data)
-
-    return render_template(
-        'select_seats.html',
-        movie=movie,
-        theatre=theatre,
-        timing=timing,
-        date=date,
-        booked_seats=booked_seats  # 🎯 pass to template
-    )
+    return render_template("select_seats.html", movie=movie, theatre=theatre, timing=timing, date=date, booked_seats=booked_seats)
 
 @app.route('/logout')
 def logout():
     session.clear()
-    flash('Logged out successfully!')
+    flash("Logged out successfully!")
     return redirect(url_for('index'))
+
 @app.route('/my_bookings')
 def my_bookings():
     if 'email' not in session:
         flash("Please log in to view your bookings.")
         return redirect(url_for('login'))
-
-    user_email = session['email']
-    user_bookings = [b for b in bookings.values() if b['user'] == user_email]
-
+    user_bookings = get_user_bookings(session['email'])
     return render_template('my_bookings.html', bookings=user_bookings)
+
 @app.route('/cancel_booking/<booking_id>', methods=['POST'])
 def cancel_booking(booking_id):
     if 'email' not in session:
         flash("Please log in to cancel a booking.")
         return redirect(url_for('login'))
-
-    # Check if booking exists and belongs to user
-    booking = bookings.get(booking_id)
-    if booking and booking['user'] == session['email']:
-        del bookings[booking_id]
+    result = delete_booking(booking_id, session['email'])
+    if result.deleted_count > 0:
         flash("Your booking was successfully cancelled.")
     else:
         flash("Booking not found or access denied.")
-
     return redirect(url_for('my_bookings'))
-@app.route("/developer")
+
 @app.route('/developer', methods=['GET', 'POST'])
 def developer():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
-
         if not name or not email or not message:
-            flash('All fields are required!')
+            flash("All fields are required!")
             return redirect(url_for('developer'))
-
-        flash('Thank you for reaching out! I will get back to you soon.')
+        flash("Thank you for reaching out! I will get back to you soon.")
         return redirect(url_for('developer'))
-
     return render_template('developer.html')
+
 @app.route('/terms')
 def terms():
     return render_template('terms.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
