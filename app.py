@@ -243,18 +243,35 @@ def select_seats(movie_id, theatre_id):
     theatre_list = theatres.get(movie_id, [])
     theatre = next((t for t in theatre_list if t['id'] == theatre_id), None)
 
-    # Get date and timing (these come from query params)
+    # Get date and timing
     timing = request.args.get('timing')
     date = request.args.get('date')
 
+    # 🎯 Collect already booked seats for this show
+    booked_seats = []
+    for booking in bookings.values():
+        if (
+            booking.get("movie_id") == movie_id and
+            booking.get("theater_id") == theatre_id and
+            booking.get("date") == date and
+            booking.get("timing") == timing
+        ):
+            # Split seat string into a list
+            booked_seats.extend([s.strip() for s in booking.get("seat", "").split(",") if s.strip()])
+
     if request.method == 'POST':
-        # In POST, also retrieve date and timing from hidden fields
         date = request.form.get('date', date)
         timing = request.form.get('timing', timing)
 
         selected_seats = request.form.getlist('seat')
         persons = request.form.get('persons')
         total_price = request.form.get('total_price', '0')
+
+        # Check if any selected seat was already booked
+        for seat in selected_seats:
+            if seat in booked_seats:
+                flash(f"Seat {seat} is already sold out. Please choose different seats.")
+                return redirect(request.url)
 
         if not selected_seats:
             flash("Please select at least one seat.")
@@ -266,7 +283,9 @@ def select_seats(movie_id, theatre_id):
             'booking_id': booking_id,
             'user': session['email'],
             'movie': movie['title'],
+            'movie_id': movie_id,
             'theater': theatre['name'],
+            'theater_id': theatre_id,
             'timing': timing,
             'seat': ", ".join(selected_seats),
             'persons': persons,
@@ -279,7 +298,14 @@ def select_seats(movie_id, theatre_id):
 
         return render_template('tickets.html', booking_id=booking_id, data=booking_data)
 
-    return render_template('select_seats.html', movie=movie, theatre=theatre, timing=timing, date=date)
+    return render_template(
+        'select_seats.html',
+        movie=movie,
+        theatre=theatre,
+        timing=timing,
+        date=date,
+        booked_seats=booked_seats  # 🎯 pass to template
+    )
 
 @app.route('/logout')
 def logout():
