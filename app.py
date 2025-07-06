@@ -95,6 +95,26 @@ theatres = {
         {"id": "t1", "name": "PVR Cinemas - Andheri", "timings": ["10:00 AM", "1:00 PM", "7:00 PM"]},
         {"id": "t2", "name": "Carnival - Borivali", "timings": ["11:30 AM", "3:00 PM", "9:00 PM"]}
     ],
+    "2": [
+        {"id": "t3", "name": "Cinepolis - Malad", "timings": ["9:00 AM", "12:30 PM", "6:30 PM"]},
+        {"id": "t4", "name": "INOX - Ghatkopar", "timings": ["2:00 PM", "5:30 PM", "8:45 PM"]}
+    ],
+    "3": [
+        {"id": "t5", "name": "PVR Icon - Lower Parel", "timings": ["10:15 AM", "2:15 PM", "7:45 PM"]},
+        {"id": "t6", "name": "Miraj Cinemas - Chembur", "timings": ["1:00 PM", "4:00 PM", "10:00 PM"]}
+    ],
+    "4": [
+        {"id": "t7", "name": "Movietime - Kandivali", "timings": ["9:30 AM", "1:30 PM", "6:00 PM"]},
+        {"id": "t8", "name": "MAXUS Cinemas - Bhayandar", "timings": ["11:00 AM", "3:00 PM", "9:00 PM"]}
+    ],
+    "5": [
+        {"id": "t9", "name": "Gold Cinema - Mulund", "timings": ["10:45 AM", "2:45 PM", "8:15 PM"]},
+        {"id": "t10", "name": "PVR Phoenix - Kurla", "timings": ["12:00 PM", "4:00 PM", "10:30 PM"]}
+    ],
+    "6": [
+        {"id": "t11", "name": "Carnival - Dahisar", "timings": ["9:00 AM", "1:00 PM", "7:00 PM"]},
+        {"id": "t12", "name": "Cinepolis - Thane", "timings": ["11:15 AM", "3:15 PM", "9:15 PM"]}
+    ]
     # (keep your other theatres here)
 }
 
