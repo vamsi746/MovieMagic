@@ -551,3 +551,9 @@ a:hover {
   background-color: rgba(255,255,255,0.2);
   color: #fff;
 }
+.sold-out {
+  background: rgba(255,0,0,0.3);
+  color: #fff;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
