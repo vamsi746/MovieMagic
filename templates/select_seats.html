@@ -23,8 +23,12 @@
         {% for col in range(1,13) %}
         {% set seat_id = row ~ col %}
         <div class="col-auto">
-          <input type="checkbox" class="btn-check" name="seat" value="{{ seat_id }}" id="{{ seat_id }}" data-price="150">
-          <label class="seat-tile executive" for="{{ seat_id }}">{{ col }}</label>
+          {% set is_booked = seat_id in booked_seats %}
+          <input type="checkbox" class="btn-check" name="seat" value="{{ seat_id }}" id="{{ seat_id }}" data-price="150" {% if is_booked %}disabled{% endif %}>
+          <label class="seat-tile executive {% if is_booked %}sold-out{% endif %}" for="{{ seat_id }}">
+            {% if is_booked %}Sold{% else %}{{ col }}{% endif %}
+          </label>
+
         </div>
         {% endfor %}
       </div>
